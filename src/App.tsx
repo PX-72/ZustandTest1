@@ -6,7 +6,7 @@ import MarketDataView from "./components/MarketDataView.tsx";
 
 function App() {
     const unsubscribeRef = useRef<(() => void) | null>(null);
-    const marketData = useMarketDataStore(state => state.marketData);
+    const currencyPairs = useMarketDataStore(state => state.currencyPairs);
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -18,7 +18,11 @@ function App() {
             <div>
                 <button onClick={() => unsubscribeRef.current?.()}>Unsubscribe</button>
             </div>
-            <MarketDataView marketData={marketData!} />
+            {
+                currencyPairs.map(currencyPair => {
+                    return <MarketDataView key={currencyPair} currencyPair={currencyPair} />
+                })
+            }
         </div>
     )
 }

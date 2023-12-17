@@ -3,11 +3,15 @@ import { immer } from 'zustand/middleware/immer';
 import {MarketData} from "../api/mockMarketDataFactory.ts";
 
 type Store = {
-    marketData: MarketData | null
+    currencyPairs: string[],
+    marketDataState: {
+        [currencyPair: string]: MarketData | null
+    }
 };
 
 const initialState: Store = {
-    marketData: null
+    currencyPairs: [],
+    marketDataState: {}
 };
 
 type Actions = {
@@ -20,7 +24,10 @@ export const useMarketDataStore = create<Store & Actions, [['zustand/immer', nev
         loadMarketData: (marketData: MarketData) => {
             try {
                 set((state) => {
-                    state.marketData = marketData;
+                    if (!state.currencyPairs.includes(marketData.ccyPair))
+                        state.currencyPairs.push(marketData.ccyPair);
+
+                    state.marketDataState[marketData.ccyPair] = marketData;
                 });
             } catch (err) {
                 console.error(`Market data could not be loaded. ${err}`);

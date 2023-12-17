@@ -1,25 +1,22 @@
 import {toFixedString} from "../utils/numberFormatUtil.ts";
-import {MarketData} from "../api/mockMarketDataFactory.ts";
+import {useMarketDataStore} from "../stores/useMarketDataStore.ts";
 
 type MarketDataViewProps = {
-    marketData: MarketData
+    currencyPair: string
 }
 
-const MarketDataView = ({ marketData }: MarketDataViewProps) => {
-    const {
-        ccyPair = 'unknown ccy',
-        //ecn = '',
-        bid = 0,
-        ask = 0,
-        //low = 0,
-        //high = 0,
-        decimals = 2
-    } = marketData;
+const MarketDataView = ({ currencyPair }: MarketDataViewProps) => {
+    const marketData = useMarketDataStore(state => state.marketDataState[currencyPair]);
 
     return (
         <>
             <div>
-                {ccyPair}: {toFixedString(bid, decimals)} / {toFixedString(ask, decimals)}
+                {marketData ?
+                    <p>{marketData.ccyPair}: {toFixedString(marketData.bid, marketData.decimals)} / {toFixedString(marketData.ask, marketData.decimals)} ({Math.random()})</p>
+                    :
+                    <p>loading...</p>
+                }
+
             </div>
         </>
     );
