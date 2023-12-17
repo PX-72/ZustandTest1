@@ -1,5 +1,5 @@
 import {toFixedString} from "../utils/numberFormatUtil.ts";
-import {useMarketDataStore} from "../stores/useMarketDataStore.ts";
+import {useMarketDataStore} from "../stores/marketDataStore.ts";
 
 type MarketDataViewProps = {
     currencyPair: string
